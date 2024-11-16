@@ -16,6 +16,10 @@ public class Pilar : MonoBehaviour
 
     private bool enemigosGenerados = false; // Controla si ya se han generado enemigos al reparar
 
+    // Sonido que se reproduce cuando un enemigo colisiona con el pilar
+    public AudioClip sonidoRoboCristal;
+    private AudioSource audioSource;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -30,6 +34,11 @@ public class Pilar : MonoBehaviour
         }
 
         ultimaPosicionMouse = Input.mousePosition;
+
+        // Configura el audio
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = sonidoRoboCristal;
+        audioSource.playOnAwake = false; // Para que el sonido solo se reproduzca en la colisión
     }
 
     void Update()
@@ -108,6 +117,12 @@ public class Pilar : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             AvanzarEstadoPilar();
+            
+            // Reproduce el sonido de colisión
+            if (audioSource != null && sonidoRoboCristal != null)
+            {
+                audioSource.Play();
+            }
         }
     }
 }
